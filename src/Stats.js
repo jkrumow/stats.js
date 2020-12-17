@@ -2,33 +2,42 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-var Stats = function () {
+var Stats = function (wideLayout) {
 
 	var mode = 0;
 
 	var container = document.createElement( 'div' );
-	container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
-	container.addEventListener( 'click', function ( event ) {
 
-		event.preventDefault();
-		showPanel( ++ mode % container.children.length );
+	if (!wideLayout) {
+		container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+		container.addEventListener( 'click', function ( event ) {
 
-	}, false );
+			event.preventDefault();
+			showPanel( ++ mode % container.children.length );
+
+		}, false );
+	}
 
 	//
 
 	function addPanel( panel ) {
 
-		container.appendChild( panel.dom );
+		var child = container.appendChild( panel.dom );
+		child.style.display = 'none';
+
 		return panel;
 
 	}
 
 	function showPanel( id ) {
+		if (wideLayout) {
+			container.children[ id ].style.display = 'inline-block';
+			return;
+		}
 
 		for ( var i = 0; i < container.children.length; i ++ ) {
 
-			container.children[ i ].style.display = i === id ? 'block' : 'none';
+			container.children[ i ].style.display = i === id ? 'inline-block' : 'none';
 
 		}
 
